@@ -1,0 +1,30 @@
+@media (max-width: 600px) {
+    table {
+        display: block;
+        max-width: -moz-fit-content;
+        max-width: fit-content;
+        margin: 0 auto;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    td {
+        border: 1px solid #ccc;
+    }
+
+    th,
+    td {
+        text-align: left;
+        padding: 8px;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.header-table{
+    background-color: #f9d057; color: #1384ae;
+}
