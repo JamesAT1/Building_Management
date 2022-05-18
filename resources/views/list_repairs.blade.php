@@ -22,6 +22,25 @@
     table .badge{
         font-size: 0.80rem;
     }
+    .star {
+        visibility:hidden;
+        font-size:15px;
+        cursor:pointer;
+    }
+    .star:before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f005";
+        visibility:visible;
+        color: #17adc4;
+
+    }
+    .star:checked:before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f005";
+        font-weight: 900;
+        color: #17adc4;
+
+    }
 </style>
 <body>
     @extends('layouts.main_template')
@@ -38,14 +57,15 @@
                     <table class="table table-hover" width="100%">
                         <thead class="header-table">
                             <tr>
-                                <th width="3%">ที่</th>
-                                <th width="5%">วันที่แจ้ง</th>
+                                <th width="3%">แท็ก</th>
+                                <th width="2%">ที่</th>
+                                <th width="10%">วันที่แจ้ง</th>
                                 <th width="21%">รายการ</th>
                                 <th width="3%">Delay</th>
-                                <th width="13%">ผู้ดำเนินการแจ้ง</th>
-                                <th width="13%">ผู้แก้ไข</th>
-                                <th width="7%">สถานะ</th>
-                                <th width="15%">ผู้ทำการแก้ไข</th>
+                                <th width="13%"><center>ผู้ดำเนินการแจ้ง</center></th>
+                                <th width="13%"><center>ผู้แก้ไข</center></th>
+                                <th width="7%"><center>สถานะ</center></th>
+                                <th width="15%"><center>ผู้ทำการแก้ไข</center></th>
                                 <th width="20%">หมายเหตุ/รายละเอียด</th>
                             </tr>
                         </thead>
@@ -68,29 +88,42 @@
 
                             @foreach($list_of_repairs as $list_of_repair)
                                 <tr>
-                                    <td>{{$list_of_repairs->firstItem() + $loop->index}}</td>
                                     <td>
+                                        <form action="{{url('set_bookmark')}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="bm_id" value="{{$list_of_repair->list_repair_id}}" />
+                                            @if($list_of_repair->bookmark_checked == true)
+                                                <input class="star" name="bm_status" value="1" checked type="checkbox" onclick="this.form.submit()">
+                                            @else
+                                                <input class="star" name="bm_status" value="0" type="checkbox" onclick="this.form.submit()">
+                                            @endif
+                                        </form>
+                                    </td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">{{$list_of_repairs->firstItem() + $loop->index}}</td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
                                         {{(new Datetime($list_of_repair->date_of_report))->format('d-m-Y')}}
                                     </td>
-                                    <td>{{$list_of_repair->list_report}}</td>
-                                    <td>{{((new Datetime($list_of_repair->date_of_report))->diff(new Datetime))->format('%d')}}</td>
-                                    <td>{{$list_of_repair->notifier}}</td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">{{$list_of_repair->list_report}}</td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{((new Datetime($list_of_repair->date_of_report))->diff(new Datetime))->format('%d')}}</center></td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{$list_of_repair->notifier}}</center></td>
 
-                                @if($list_of_repair->status_repair != "ยังไม่แก้ไข")
-                                    <td>จูน อนุชิต</td>
-                                    <td style="color: red;"><b>ยังไม่แก้ไข</b></td>
-                                    <td>
-                                        <span class="badge rounded-pill bg-success" style="margin: 1.8px">จูน อนุชิต</span>
-                                        <span class="badge rounded-pill bg-success" style="margin: 1.8px">เจน ณัฐกมล</span>
-                                        <span class="badge rounded-pill bg-success" style="margin: 1.8px">โชค ภาสวุฒิ</span>
-                                    </td>
-                                    <td>มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
-                                @else
-                                        <td><center>-</center></td>
-                                        <td style="color: red;"><b>ยังไม่แก้ไข</b></td>
-                                        <td><center>-</center></td>
-                                        <td><center>-</center></td>
-                                @endif
+                                    @if($list_of_repair->status_repair != "ยังไม่แก้ไข")
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>จูน อนุชิต</center></td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: red;"><center><b>ยังไม่แก้ไข</b></center></td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
+                                            <center>
+                                                <span class="badge rounded-pill bg-success" style="margin: 1.8px">จูน อนุชิต</span>
+                                                <span class="badge rounded-pill bg-success" style="margin: 1.8px">เจน ณัฐกมล</span>
+                                                <span class="badge rounded-pill bg-success" style="margin: 1.8px">โชค ภาสวุฒิ</span>
+                                            </center>
+                                        </td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
+                                    @else
+                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: red;"><b>ยังไม่แก้ไข</b></td>
+                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

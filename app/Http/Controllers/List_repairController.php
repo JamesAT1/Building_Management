@@ -12,12 +12,31 @@ date_default_timezone_set('Asia/Bangkok');
 class List_repairController extends Controller
 {
     public function list_repair(){
-        $list_of_repairs = list_of_repairs::paginate(10);
+        $list_of_repairs = list_of_repairs::orderByDesc('bookmark_checked')->paginate(10);
         return view('list_repairs', compact(['list_of_repairs']));
     }
 
     public function form_list_repair(){
         return view('form_list_repair');
+    }
+
+    public function set_bookmark(Request $request){
+        $list_of_repairs = list_of_repairs::find($request->bm_id);
+
+        if($list_of_repairs->bookmark_checked == true){
+            $list_of_repairs->bookmark_checked = false;
+        }else{
+            $list_of_repairs->bookmark_checked = true;
+        }
+
+        $list_of_repairs->save();
+
+        return redirect('list_repairs');
+    }
+
+    public function process_repair($id){
+        $list_of_repair = list_of_repairs::leftjoin('list_of_imgs', 'list_of_imgs.list_repair_id', '=', 'list_of_repairs.list_repair_id')->where('list_of_repairs.list_repair_id', '=', $id)->get();
+        return view('process_repair', compact(['list_of_repair']));
     }
 
     public function insert_list_repair(Request $request){

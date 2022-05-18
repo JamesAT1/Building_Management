@@ -46,7 +46,7 @@
                                 <br />
                             </div>
                             <div class="col-12">
-                                รูปภาพประกอบ (ถ้ามี, สูงสุด 4 รูป)
+                                รูปภาพประกอบ (ถ้ามี, สูงสุด 2 รูป)
                                 <div class="row" id="layout_img">
                                     <div class="col-12">
                                         <br />
@@ -77,7 +77,7 @@
     <script>
         $(document).ready(function () {
             $('.add_img').click(function() {
-                if($('.img_dec').length < 3){
+                if($('.img_dec').length < 1){
                     $('#layout_img').append('<div class="col-3 img_dec"><input type="file" name="img_name[]" class="form-control"/></div>');
                 }
             });
