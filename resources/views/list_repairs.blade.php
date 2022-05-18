@@ -46,7 +46,7 @@
                                 <th width="13%">ผู้แก้ไข</th>
                                 <th width="15%">ผู้ทำการแก้ไข</th>
                                 <th width="7%">สถานะ</th>
-                                <th width="20%">หมายเหตุ</th>
+                                <th width="20%">หมายเหตุ/รายละเอียด</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,9 +62,37 @@
                                     <span class="badge rounded-pill bg-success" style="margin: 1.8px">เจน ณัฐกมล</span>
                                     <span class="badge rounded-pill bg-success" style="margin: 1.8px">โชค ภาสวุฒิ</span>
                                 </td>
-                                <td style="color: red;"><b>ยังไม่แก้ไข</b></td>
+                                <td style="color: green;"><b>แก้ไขสำเร็จ</b></td>
                                 <td>มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
                             </tr>
+
+                            @foreach($list_of_repairs as $list_of_repair)
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        {{(new Datetime($list_of_repair->date_of_report))->format('d-m-Y')}}
+                                    </td>
+                                    <td>{{$list_of_repair->list_report}}</td>
+                                    <td>{{((new Datetime($list_of_repair->date_of_report))->diff(new Datetime))->format('%d')}}</td>
+                                    <td>{{$list_of_repair->notifier}}</td>
+
+                                @if($list_of_repair->status_repair != "ยังไม่แก้ไข")
+                                    <td>จูน อนุชิต</td>
+                                    <td style="color: red;"><b>ยังไม่แก้ไข</b></td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-success" style="margin: 1.8px">จูน อนุชิต</span>
+                                        <span class="badge rounded-pill bg-success" style="margin: 1.8px">เจน ณัฐกมล</span>
+                                        <span class="badge rounded-pill bg-success" style="margin: 1.8px">โชค ภาสวุฒิ</span>
+                                    </td>
+                                    <td>มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
+                                @else
+                                        <td><center>-</center></td>
+                                        <td><center>-</center></td>
+                                        <td style="color: red;"><b>ยังไม่แก้ไข</b></td>
+                                        <td><center>-</center></td>
+                                @endif
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
