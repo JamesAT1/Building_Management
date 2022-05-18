@@ -12,7 +12,7 @@ date_default_timezone_set('Asia/Bangkok');
 class List_repairController extends Controller
 {
     public function list_repair(){
-        $list_of_repairs = list_of_repairs::all();
+        $list_of_repairs = list_of_repairs::paginate(10);
         return view('list_repairs', compact(['list_of_repairs']));
     }
 
@@ -42,6 +42,6 @@ class List_repairController extends Controller
                 $list_of_img->save();
             }
         }
-        return view('list_repairs');
+        return redirect('list_repairs');
     }
 }

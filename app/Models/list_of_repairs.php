@@ -19,6 +19,8 @@ class list_of_repairs extends Model
         'editor',
         'operator',
         'description',
-        'approve_report'
+        'approve_report',
+        'bookmark_checked',
+        'processing_date'
     ];
 }

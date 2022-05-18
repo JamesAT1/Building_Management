@@ -23,6 +23,8 @@ class CreateListOfRepairsTable extends Migration
             $table->string('operator');
             $table->string('description');
             $table->string('approve_report');
+            $table->boolean('bookmark_checked');
+            $table->string('processing_date');
             $table->timestamps();
         });
     }

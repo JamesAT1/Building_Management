@@ -44,31 +44,31 @@
                                 <th width="3%">Delay</th>
                                 <th width="13%">ผู้ดำเนินการแจ้ง</th>
                                 <th width="13%">ผู้แก้ไข</th>
-                                <th width="15%">ผู้ทำการแก้ไข</th>
                                 <th width="7%">สถานะ</th>
+                                <th width="15%">ผู้ทำการแก้ไข</th>
                                 <th width="20%">หมายเหตุ/รายละเอียด</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {{-- <tr>
                                 <td>1</td>
                                 <td>08/05/2022</td>
                                 <td>ชั้น 7 เครื่องจ่ายไฟมีปัญหา ไหลไม่หยุด</td>
                                 <td>62</td>
                                 <td>โชค ภาสวุฒิ</td>
                                 <td>จูน อนุชิต</td>
+                                <td style="color: green;"><b>แก้ไขสำเร็จ</b></td>
                                 <td>
                                     <span class="badge rounded-pill bg-success" style="margin: 1.8px">จูน อนุชิต</span>
                                     <span class="badge rounded-pill bg-success" style="margin: 1.8px">เจน ณัฐกมล</span>
                                     <span class="badge rounded-pill bg-success" style="margin: 1.8px">โชค ภาสวุฒิ</span>
                                 </td>
-                                <td style="color: green;"><b>แก้ไขสำเร็จ</b></td>
                                 <td>มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
-                            </tr>
+                            </tr> --}}
 
                             @foreach($list_of_repairs as $list_of_repair)
                                 <tr>
-                                    <td></td>
+                                    <td>{{$list_of_repairs->firstItem() + $loop->index}}</td>
                                     <td>
                                         {{(new Datetime($list_of_repair->date_of_report))->format('d-m-Y')}}
                                     </td>
@@ -87,14 +87,17 @@
                                     <td>มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
                                 @else
                                         <td><center>-</center></td>
-                                        <td><center>-</center></td>
                                         <td style="color: red;"><b>ยังไม่แก้ไข</b></td>
+                                        <td><center>-</center></td>
                                         <td><center>-</center></td>
                                 @endif
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <div>
+                        {{$list_of_repairs->links('pagination::bootstrap-4')}}
+                    </div>
                 </div>
             </div>
         </div>
