@@ -71,6 +71,8 @@ Route::middleware(['check_login'])->group(function () {
     Route::post('/insert_list_repair/add', [List_repairController::class, 'insert_list_repair']);
     Route::get('/process_repair/{id}', [List_repairController::class, 'process_repair']);
     Route::post('/set_bookmark', [List_repairController::class, 'set_bookmark']);
+    Route::post('/process_repair_update', [List_repairController::class, 'process_repair_update']);
+    
 });
 
 Route::get('/callLineMessage', [LineMessageController::class, 'getLineGroup']);

@@ -20,6 +20,16 @@ class List_repairController extends Controller
         return view('form_list_repair');
     }
 
+    public function process_repair_update(Request $request){
+        $list_of_repairs = list_of_repairs::find($request->list_repair_id);
+        $list_of_repairs->status_repair = $request->status_repair;
+        $list_of_repairs->description = $request->description;
+
+        $list_of_repairs->update();
+
+        return redirect('list_repairs');
+    }
+
     public function set_bookmark(Request $request){
         $list_of_repairs = list_of_repairs::find($request->bm_id);
 
@@ -36,7 +46,7 @@ class List_repairController extends Controller
 
     public function process_repair($id){
         $list_of_repair = list_of_repairs::leftjoin('list_of_imgs', 'list_of_imgs.list_repair_id', '=', 'list_of_repairs.list_repair_id')->where('list_of_repairs.list_repair_id', '=', $id)->get();
-        return view('process_repair', compact(['list_of_repair']));
+        return view('process_repair', compact(['list_of_repair', 'id']));
     }
 
     public function insert_list_repair(Request $request){

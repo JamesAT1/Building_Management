@@ -122,12 +122,12 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function show_img(pString){
-            Swal.fire({
-            imageUrl: '../../../'+pString,
-            showCloseButton: true,
-            showConfirmButton: false,
-            imageWidth: 300,
-        })
+                Swal.fire({
+                imageUrl: '../../../'+pString,
+                showCloseButton: true,
+                showConfirmButton: false,
+                imageWidth: 300,
+            })
         }
     </script>
 </body>

@@ -15,4 +15,8 @@ class list_of_imgs extends Model
         'img_name',
         'img_description',
     ];
+
+    public function list_of_repairs(){
+        return $this->belongsTo(list_of_repairs::class);
+    }
 }

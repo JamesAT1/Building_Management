@@ -47,10 +47,10 @@
     @section('content')
             <div class="card">
                 <div class="card-header">
-                    <h3>
-                        รายงานการแจ้งซ่อม 
+                    <h4>
+                        งานที่มอบหมาย/แจ้งซ่อม
                         <a href="{{url('/insert_list_repair')}}" class="btn btn-info" style="float: right;">สร้างรายงานการแจ้งซ่อม</a>
-                    </h3>
+                    </h4>
                 </div>
                 <div class="card-body">
                     <div style="overflow: auto; overflow-x:auto;">
@@ -63,29 +63,13 @@
                                 <th width="21%">รายการ</th>
                                 <th width="3%">Delay</th>
                                 <th width="13%"><center>ผู้ดำเนินการแจ้ง</center></th>
-                                <th width="13%"><center>ผู้แก้ไข</center></th>
-                                <th width="7%"><center>สถานะ</center></th>
-                                <th width="15%"><center>ผู้ทำการแก้ไข</center></th>
+                                <th width="13%"><center>มอบหมาย</center></th>
+                                <th width="10%"><center>สถานะ</center></th>
+                                <th width="10%"><center>ผู้ทำการแก้ไข</center></th>
                                 <th width="20%">หมายเหตุ/รายละเอียด</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- <tr>
-                                <td>1</td>
-                                <td>08/05/2022</td>
-                                <td>ชั้น 7 เครื่องจ่ายไฟมีปัญหา ไหลไม่หยุด</td>
-                                <td>62</td>
-                                <td>โชค ภาสวุฒิ</td>
-                                <td>จูน อนุชิต</td>
-                                <td style="color: green;"><b>แก้ไขสำเร็จ</b></td>
-                                <td>
-                                    <span class="badge rounded-pill bg-success" style="margin: 1.8px">จูน อนุชิต</span>
-                                    <span class="badge rounded-pill bg-success" style="margin: 1.8px">เจน ณัฐกมล</span>
-                                    <span class="badge rounded-pill bg-success" style="margin: 1.8px">โชค ภาสวุฒิ</span>
-                                </td>
-                                <td>มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
-                            </tr> --}}
-
                             @foreach($list_of_repairs as $list_of_repair)
                                 <tr>
                                     <td>
@@ -103,26 +87,45 @@
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
                                         {{(new Datetime($list_of_repair->date_of_report))->format('d-m-Y')}}
                                     </td>
-                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">{{$list_of_repair->list_report}}</td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
+                                        <?php echo strlen($list_of_repair->list_report) > 90 ? mb_substr($list_of_repair->list_report, 0, 70, 'utf-8') . "..." : $list_of_repair->list_report ; ?>
+                                    </td>
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{((new Datetime($list_of_repair->date_of_report))->diff(new Datetime))->format('%d')}}</center></td>
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{$list_of_repair->notifier}}</center></td>
 
-                                    @if($list_of_repair->status_repair != "ยังไม่แก้ไข")
-                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>จูน อนุชิต</center></td>
-                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: red;"><center><b>ยังไม่แก้ไข</b></center></td>
+                                    @if($list_of_repair->status_repair == "ยังไม่ดำเนินการ")
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: red;"><center>ยังไม่ดำเนินการ</center></td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
-                                            <center>
-                                                <span class="badge rounded-pill bg-success" style="margin: 1.8px">จูน อนุชิต</span>
-                                                <span class="badge rounded-pill bg-success" style="margin: 1.8px">เจน ณัฐกมล</span>
-                                                <span class="badge rounded-pill bg-success" style="margin: 1.8px">โชค ภาสวุฒิ</span>
-                                            </center>
+                                            @if($list_of_repair->description != null && $list_of_repair->description != '')
+                                                {{$list_of_repair->description}}
+                                            @else
+                                                <center>-</center>
+                                            @endif
                                         </td>
-                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">มาเวลพึ่งนำไปเคลมวันที่ 15 มี.ค.</td>
-                                    @else
-                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
-                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: red;"><b>ยังไม่แก้ไข</b></td>
-                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
-                                            <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                    @elseif($list_of_repair->status_repair == "กำลังดำเนินการ")
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: rgb(81, 0, 255);"><center>กำลังดำเนินการ</center></td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
+                                            @if($list_of_repair->description != null && $list_of_repair->description != '')
+                                            <?php echo strlen($list_of_repair->description) > 30 ? mb_substr($list_of_repair->description, 0, 30, 'utf-8') . "..." : $list_of_repair->description ; ?>
+                                            @else
+                                                <center>-</center>
+                                            @endif
+                                        </td>
+                                    @elseif($list_of_repair->status_repair == "ดำเนินการสำเร็จ")
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: rgb(0, 182, 9);"><center>ดำเนินการสำเร็จ</center></td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
+                                        @if($list_of_repair->description != null && $list_of_repair->description != '')
+                                        <?php echo strlen($list_of_repair->description) > 30 ? mb_substr($list_of_repair->description, 0, 20, 'utf-8') . "..." : $list_of_repair->description ; ?>
+                                        @else
+                                            <center>-</center>
+                                        @endif
+                                    </td>
                                     @endif
                                 </tr>
                             @endforeach

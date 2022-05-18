@@ -6,7 +6,7 @@
   .active p,
   .active .nav-icon {
     color: #1384ae;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
   }
 </style>
 <!-- Main Sidebar Container -->
@@ -89,7 +89,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a href="{{url('/check_machine')}}" class="nav-link {{ (request()->is('check_machine')) ? 'active' : '' || (request()->is('insert_machine')) ? 'active' : '' || (request()->is('report_check_machine')) ? 'active' : '' || (request()->is('row_report_check_machine')) ? 'active' : ''}} ">
+          <a href="{{url('/check_machine')}}" class="nav-link {{ (request()->is('check_machine')) ? 'active' : '' || (request()->is('insert_machine')) ? 'active' : '' || (request()->is('report_check_machine')) ? 'active' : '' || (request()->is('row_report_check_machine')) ? 'active' : '' || (request()->is('checking_machine/*')) ? 'active' : ''}} ">
             <i class="nav-icon fas fa-solid fa-temperature-half"></i>
             <p>
               เช็คห้องเครื่อง
@@ -97,10 +97,10 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{url('/list_repairs')}}" class="nav-link {{ (request()->is('list_repairs')) ? 'active' : '' || (request()->is('insert_list_repair')) ? 'active' : ''}} ">
+          <a href="{{url('/list_repairs')}}" class="nav-link {{ (request()->is('list_repairs')) ? 'active' : '' || (request()->is('process_repair/*')) ? 'active' : '' || (request()->is('insert_list_repair')) ? 'active' : ''}} ">
             <i class="fa-solid nav-icon fas fa-screwdriver-wrench"></i>
             <p>
-              รายงานการแจ้งซ่อม
+              งานที่มอบหมาย/แจ้งซ่อม
             </p>
           </a>
         </li>

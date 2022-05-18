@@ -23,4 +23,8 @@ class list_of_repairs extends Model
         'bookmark_checked',
         'processing_date'
     ];
+
+    public function list_of_imgs(){
+        return $this->hasMany(list_of_imgs::class, 'list_repair_id');
+    }
 }
