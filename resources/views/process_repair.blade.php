@@ -38,16 +38,16 @@
                     <input type="hidden" name="list_repair_id" value="{{$id}}">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-5">
                                 <div class="card">
                                     <div class="card-body">
-                                        <label>ผู้ดำเนินการแจ้ง</label>
+                                        <label>ผู้แจ้ง</label>
                                         <br />
                                         <span>{{$list_of_repair[0]->notifier}}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-7">
                                 <div class="card">
                                     <div class="card-body">
                                         <label>ผู้รับมอบหมาย/ผู้แก้ไข</label>
@@ -72,12 +72,10 @@
                                                                     <img src="{{asset('img/report_repairs/'.$list_of_repair[$i]->img_name)}}" width="80%" onclick="show_img('{{'img/report_repairs/'.$list_of_repair[$i]->img_name}}')" />
                                                                 @else
                                                                     <p>ไม่มี</p>
-                                                                    <?php break; ?>
                                                                 @endif
                                                             </div>
                                                         @endfor
                                                     </div>
-                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -149,6 +147,22 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
+            if($('.text_description').length < 1 && $('.select_status').val() != ''){
+                $('#description').append('<div class="card text_description">' +
+                    '<div class="card-body">' +
+                        '<label>'+
+                            ' หมายเหตุ/รายละเอียด'+
+                            '</label>'+
+                            '<br />'+
+                            '<textarea rows="4" class="form-control" placeholder="อัพเดทงาน เช่น &#10; 1.กำลังดำเนินการ &#10; 2.เสร็จสิ้น" name="description"></textarea>'+
+                    '</div>'+
+                '</div>');
+            }
+
+            $('.select_status').change(function () {
+                
+            });
+
             $('.select_status').change(function () { 
                 if($('.text_description').length < 1){
                     $('#description').append('<div class="card text_description">' +

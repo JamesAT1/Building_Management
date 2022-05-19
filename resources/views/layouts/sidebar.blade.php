@@ -57,7 +57,7 @@
         @endif
         @if(session('user_auth')[0]->user_rule_status == 0)
         <li class="nav-item">
-          <a href="{{url('/show_user')}}" class="nav-link {{ (request()->is('show_user')) ? 'active' : '' || (request()->is('insert_user')) ? 'active' : ''}} ">
+          <a href="{{url('/show_user')}}" class="nav-link {{ (request()->is('show_user')) ? 'active' : '' || (request()->is('insert_user')) ? 'active' : '' || (request()->is('modify_user/*')) ? 'active' : ''}} ">
             <i class="nav-icon fas fa-solid fa-user"></i>
             <p>
               สมาชิก
