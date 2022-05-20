@@ -60,6 +60,7 @@ class ProcessController extends Controller
 
         $user_account = DB::table('user_accounts')->get();
         $dateofworks = DB::table('dateofworks')->where('date_start_work', '>', ($dt->diff(new DateTime("0000-01-00 00:00:00")))->format('%y-%m-%d 00:00:00'))->orderByDesc('date_start_work')->get();
+
         return view('checkIn_management', compact(['user_account', 'dateofworks']));
     }
 

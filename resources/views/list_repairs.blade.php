@@ -49,7 +49,7 @@
                 <div class="card-header">
                     <h4>
                         งานที่มอบหมาย/แจ้งซ่อม
-                        <a href="{{url('/insert_list_repair')}}" class="btn btn-info" style="float: right;">สร้างรายงานการแจ้งซ่อม</a>
+                        <a href="{{url('/insert_list_repair')}}" class="btn btn-info" style="float: right;">สร้างรายงาน</a>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -90,11 +90,15 @@
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
                                         <?php echo strlen($list_of_repair->list_report) > 90 ? mb_substr($list_of_repair->list_report, 0, 70, 'utf-8') . "..." : $list_of_repair->list_report ; ?>
                                     </td>
-                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{((new Datetime($list_of_repair->date_of_report))->diff(new Datetime))->format('%d')}}</center></td>
+                                    @if($list_of_repair->date_for_update != "0000-00-00 00:00:00" && $list_of_repair->status_repair != "ยังไม่ดำเนินการ")
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{((new Datetime($list_of_repair->date_of_report))->diff(new Datetime($list_of_repair->date_for_update)))->format('%d')}}</center></td>
+                                    @else
+                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{((new Datetime($list_of_repair->date_of_report))->diff(new Datetime))->format('%d')}}</center></td>
+                                    @endif
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{$list_of_repair->notifier}}</center></td>
+                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{$list_of_repair->editor}}</center></td>
 
                                     @if($list_of_repair->status_repair == "ยังไม่ดำเนินการ")
-                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: red;"><center>ยังไม่ดำเนินการ</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
@@ -105,7 +109,6 @@
                                             @endif
                                         </td>
                                     @elseif($list_of_repair->status_repair == "กำลังดำเนินการ")
-                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: rgb(81, 0, 255);"><center>กำลังดำเนินการ</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
@@ -116,7 +119,6 @@
                                             @endif
                                         </td>
                                     @elseif($list_of_repair->status_repair == "ดำเนินการสำเร็จ")
-                                    <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: rgb(0, 182, 9);"><center>ดำเนินการสำเร็จ</center></td>
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>-</center></td>
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">

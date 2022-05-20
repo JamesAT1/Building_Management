@@ -13,6 +13,7 @@ class list_of_repairs extends Model
     protected $fillable = [
         'list_repair_id',
         'date_of_report',
+        'date_for_update',
         'list_report',
         'status_repair',
         'notifier',

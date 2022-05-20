@@ -89,7 +89,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a href="{{url('/check_machine')}}" class="nav-link {{ (request()->is('check_machine')) ? 'active' : '' || (request()->is('insert_machine')) ? 'active' : '' || (request()->is('report_check_machine')) ? 'active' : '' || (request()->is('row_report_check_machine')) ? 'active' : '' || (request()->is('checking_machine/*')) ? 'active' : ''}} ">
+          <a href="{{url('/check_machine')}}" class="nav-link {{ (request()->is('check_machine')) ? 'active' : '' || (request()->is('insert_machine')) ? 'active' : '' || (request()->is('report_check_machine')) ? 'active' : '' || (request()->is('row_report_check_machine')) ? 'active' : '' || (request()->is('checking_machine/*')) ? 'active' : '' || (request()->is('detail_report_check_machine/*')) ? 'active' : '' }} ">
             <i class="nav-icon fas fa-solid fa-temperature-half"></i>
             <p>
               เช็คห้องเครื่อง

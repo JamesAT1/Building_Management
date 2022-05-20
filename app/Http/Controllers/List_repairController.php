@@ -22,7 +22,11 @@ class List_repairController extends Controller
 
     public function process_repair_update(Request $request){
         $list_of_repairs = list_of_repairs::find($request->list_repair_id);
-        $list_of_repairs->status_repair = $request->status_repair;
+
+        if($request->status_repair != "ยังไม่ดำเนินการ"){
+            $list_of_repairs->status_repair = $request->status_repair;
+            $list_of_repairs->date_for_update = new DateTime();
+        }
         $list_of_repairs->description = $request->description;
 
         $list_of_repairs->update();
@@ -53,7 +57,8 @@ class List_repairController extends Controller
         $list_of_repairs = new list_of_repairs;
         $list_of_repairs->list_report = $request->list_report;
         $list_of_repairs->date_of_report = new DateTime();
-        $list_of_repairs->status_repair = "ยังไม่แก้ไข";
+        $list_of_repairs->status_repair = "ยังไม่ดำเนินการ";
+        $list_of_repairs->editor = $request->editor;
         $list_of_repairs->notifier = session('user_auth')[0]->user_firstname . " (". session('user_auth')[0]->user_nickname .")";
 
         $list_of_repairs->save();

@@ -16,6 +16,7 @@ class CreateListOfRepairsTable extends Migration
         Schema::create('list_of_repairs', function (Blueprint $table) {
             $table->integer('list_repair_id');
             $table->dateTime('date_of_report');
+            $table->dateTime('date_for_update');
             $table->string('list_report');
             $table->string('status_repair');
             $table->string('notifier');
@@ -25,7 +26,6 @@ class CreateListOfRepairsTable extends Migration
             $table->string('approve_report');
             $table->boolean('bookmark_checked');
             $table->string('processing_date');
-            $table->timestamps();
         });
     }
 

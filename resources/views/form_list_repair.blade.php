@@ -34,7 +34,7 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-header">
-                    <h4>สร้างรายงานการแจ้งซ่อม</h4>
+                    <h4>สร้างรายงาน</h4>
                 </div>
                 <form action="{{url('/insert_list_repair/add')}}" method="post" enctype="multipart/form-data">
                     @csrf
@@ -44,6 +44,19 @@
                                 <label>รายการ</label>
                                 <textarea class="form-control" name="list_report" placeholder="กรุณากรอกรายการ" required></textarea>
                                 <br />
+                            </div>
+                            <div class="col-12">
+                              <label>มอบหมายให้</label>
+                             <select class="form-select" required name="editor">
+                                 <option value="">ระบุ</option>
+                                 <option value="Operator">Operator</option>
+                                 <option value="Reception">Reception</option>
+                                 <option value="Engineer">Engineer</option>
+                                 <option value="Programmer">Programmer</option>
+                                 <option value="Other">Other</option>
+
+                             </select>
+                             <br />
                             </div>
                             <div class="col-12">
                                 รูปภาพประกอบ (ถ้ามี, สูงสุด 2 รูป)
