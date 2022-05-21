@@ -22,7 +22,8 @@ class list_of_repairs extends Model
         'description',
         'approve_report',
         'bookmark_checked',
-        'processing_date'
+        'processing_date',
+        'new_update_active',
     ];
 
     public function list_of_imgs(){

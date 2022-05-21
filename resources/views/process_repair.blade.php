@@ -1,4 +1,6 @@
-<?php date_default_timezone_set('Asia/Bangkok') ?>
+<?php
+    date_default_timezone_set('Asia/Bangkok') 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,9 +52,9 @@
                             <div class="col-7">
                                 <div class="card">
                                     <div class="card-body">
-                                        <label>ผู้รับมอบหมาย/ผู้แก้ไข</label>
+                                        <label>ผู้รับมอบหมาย</label>
                                         <br />
-                                        <span>ไม่มี</span>
+                                        <span>{{$list_of_repair[0]->editor != null ? $list_of_repair[0]->editor : "ไม่มี"}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +65,7 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <label>
-                                                        รูปภาพประกอบ
+                                                        แนบไฟล์ประกอบ
                                                     </label>
                                                     <div class="row">
                                                         @for($i = 0; $i < count($list_of_repair); $i++)
@@ -104,7 +106,7 @@
                                                 @if($list_of_repair[0]->status_repair == "กำลังดำเนินการ")
                                                     <option value="ดำเนินการสำเร็จ">ดำเนินการสำเร็จ</option>
                                                 @elseif($list_of_repair[0]->status_repair == "ดำเนินการสำเร็จ")
-                                                    <option value="ดำเนินการสำเร็จ">กำลังดำเนินการ</option>
+                                                    <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
                                                 @endif
                                             @else
                                                 <option value="">ระบุ</option>
@@ -116,7 +118,7 @@
                                 </div>
                             </div>
                             <div class="col-12" id="description">
-                                @if($list_of_repair[0]->description != null && $list_of_repair[0]->description != '')
+                                @if($list_of_repair[0]->status_repair == "กำลังดำเนินการ" || $list_of_repair[0]->status_repair == "ดำเนินการสำเร็จ" )
                                 <div class="card text_description">
                                     <div class="card-body">
                                         <label>
@@ -127,6 +129,36 @@
                                     </div>
                                 </div>
                                 @endif
+                            </div>
+                            <div class="col-12 operator">
+                                @if($list_of_repair[0]->operator != null && $list_of_repair[0]->status_repair == "ดำเนินการสำเร็จ" && $list_of_repair[0]->operator != '')
+                                    <div class="card select-operator">
+                                        <div class="card-body">
+                                            <label>เสร็จสิ้นโดย</label>
+                                            <select class="form-select select-operator" id="operator" onchange="other_seelect(this.value)" required name="operator">
+                                                <option value="{{$list_of_repair[0]->operator}}">{{$list_of_repair[0]->operator}}</option>
+                                                @if($list_of_repair[0]->operator != 'Operator')
+                                                    <option value="Operator">Operation</option>
+                                                @endif
+                                                @if($list_of_repair[0]->operator != 'Reception')
+                                                    <option value="Reception">Reception</option>
+                                                @endif
+                                                @if($list_of_repair[0]->operator != 'Engineer')
+                                                    <option value="Engineer">Engineer</option>
+                                                @endif
+                                                @if($list_of_repair[0]->operator != 'Programmer')
+                                                    <option value="Programmer">Programmer</option>
+                                                @endif
+                                                @if($list_of_repair[0]->operator != 'Other')
+                                                    <option value="Other">Other</option>
+                                                @endif
+                                            </select>
+                                         </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div id="other">
+                              
                             </div>
                             <div class="col-12">
                                 <br />
@@ -147,20 +179,25 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
-            if($('.text_description').length < 1 && $('.select_status').val() != ''){
-                $('#description').append('<div class="card text_description">' +
-                    '<div class="card-body">' +
-                        '<label>'+
-                            ' หมายเหตุ/รายละเอียด'+
-                            '</label>'+
-                            '<br />'+
-                            '<textarea rows="4" class="form-control" placeholder="อัพเดทงาน เช่น &#10; 1.กำลังดำเนินการ &#10; 2.เสร็จสิ้น" name="description"></textarea>'+
-                    '</div>'+
-                '</div>');
-            }
 
             $('.select_status').change(function () {
-                
+                if($('.select_status').val() === "ดำเนินการสำเร็จ" && $('.select-operator').length < 1){
+                    $('.operator').append('<div class="card select-operator">' +
+                    '<div class="card-body">' +
+                        '<label>แก้ไขโดย</label>' +
+                            '<select class="form-select select-operator" id="operator" onchange="other_seelect(this.value)" required name="operator">' +
+                                '<option value="">ระบุ</option>' +
+                                '<option value="Operator">Operation</option>' +
+                                '<option value="Reception">Reception</option>' +
+                                '<option value="Engineer">Engineer</option>' +
+                                '<option value="Programmer">Programmer</option>' +
+                                '<option value="Other">Other</option>' +
+                            '</select>' +
+                        ' </div>' +
+                    '</div>');
+                }else{
+                    $('.select-operator').remove();
+                }
             });
 
             $('.select_status').change(function () { 
@@ -178,6 +215,18 @@
             });
         });
 
+        function other_seelect(e){
+            if(e === "Other"){
+                $('#other').append('<div class="card text-other">' +
+                    '<div class="card-body">' +
+                '<div><label>ระบุ ทีม/พนักงาน ที่ต้องการมอบหมาย</label><input class="form-control" name="operator" required placeholder="กรอก"/></div>' +
+                '</div>' +
+            '</div>');
+            }else{
+                $('.text-other').remove();
+            }
+        }
+        
         function show_img(pString){
                 Swal.fire({
                 imageUrl: '../'+pString,

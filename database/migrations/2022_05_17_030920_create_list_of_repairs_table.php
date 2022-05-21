@@ -26,6 +26,7 @@ class CreateListOfRepairsTable extends Migration
             $table->string('approve_report');
             $table->boolean('bookmark_checked');
             $table->string('processing_date');
+            $table->string('new_update_active');
         });
     }
 

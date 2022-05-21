@@ -1,4 +1,6 @@
-<?php date_default_timezone_set('Asia/Bangkok') ?>
+<?php
+    date_default_timezone_set('Asia/Bangkok') 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,41 +44,44 @@
                         <div class="row">
                             <div class="col-12">
                                 <label>รายการ</label>
-                                <textarea class="form-control" name="list_report" placeholder="กรุณากรอกรายการ" required></textarea>
+                                <textarea class="form-control" rows="5" name="list_report" placeholder="กรุณากรอกรายการ" required></textarea>
                                 <br />
                             </div>
                             <div class="col-12">
                               <label>มอบหมายให้</label>
-                             <select class="form-select" required name="editor">
+                             <select class="form-select assignment" required name="editor">
                                  <option value="">ระบุ</option>
-                                 <option value="Operator">Operator</option>
+                                 <option value="Operator">Operation</option>
                                  <option value="Reception">Reception</option>
                                  <option value="Engineer">Engineer</option>
                                  <option value="Programmer">Programmer</option>
                                  <option value="Other">Other</option>
-
                              </select>
                              <br />
+                             <div class="other">
+
+                             </div>
                             </div>
                             <div class="col-12">
-                                รูปภาพประกอบ (ถ้ามี, สูงสุด 2 รูป)
+                                <br />
+                                <label>ไฟล์ประกอบ (ถ้ามี, สูงสุด 2 รูป)</label>
                                 <div class="row" id="layout_img">
                                     <div class="col-12">
-                                        <br />
                                     </div>
                                     <div class="col-3">
                                         <input type="file" name="img_name[]" accept="image/*" class="form-control"/>
                                     </div>
                                 </div>
                                 <br />
-                                <input type="button" class="btn btn-sm btn-success add_img" value="เพิ่มรูปภาพ" />
+                                <input type="button" class="btn btn-sm btn-info add_img" value="เพิ่ม" />
                                 <input type="button" class="btn btn-sm btn-danger remove_img" value="ลบ" />
+                                <br />
+                                <br />
                             </div>
                             <div class="col-12">
                             <br />
                                 <button type="submit" class="form-control btn btn-info">สร้างรายงานการแจ้งซ่อม</button>
                                 <a href="{{url('/list_repairs')}}" class="form-control btn">ย้อนกลับ</a>
-                                <br />
                             </div>
                         </div>
                     </div>
@@ -92,6 +97,23 @@
             $('.add_img').click(function() {
                 if($('.img_dec').length < 1){
                     $('#layout_img').append('<div class="col-3 img_dec"><input type="file" name="img_name[]" class="form-control"/></div>');
+                }
+            });
+
+            $('.assignment').change(function() {
+                if($('.assignment').val() == "Other"){
+                    $('.other').append('<div class="text-other">' +
+                    '<label>ระบุ ทีม/พนักงาน ที่ต้องการมอบหมาย</label>' +
+                        '<div class="form-check">' +
+                            '<input class="form-check-input" type="checkbox" value="" id="Operator">' +
+                            '<label class="form-check-label" for="Operator">' +
+                                'Operator' +
+                            '</label>' +
+                        '</div>' +
+                        '<br />' +
+                    '<input class="form-control" name="editor" required placeholder="กรอก"/></div>');
+                }else{
+                    $('.text-other').remove();
                 }
             });
 

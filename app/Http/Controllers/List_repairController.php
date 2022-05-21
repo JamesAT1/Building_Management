@@ -12,7 +12,7 @@ date_default_timezone_set('Asia/Bangkok');
 class List_repairController extends Controller
 {
     public function list_repair(){
-        $list_of_repairs = list_of_repairs::orderByDesc('bookmark_checked')->paginate(10);
+        $list_of_repairs = list_of_repairs::orderByDesc('bookmark_checked')->orderByDesc('editor')->get(); //where('status_repair', '!=', 'ดำเนินการสำเร็จ')->
         return view('list_repairs', compact(['list_of_repairs']));
     }
 
@@ -26,8 +26,11 @@ class List_repairController extends Controller
         if($request->status_repair != "ยังไม่ดำเนินการ"){
             $list_of_repairs->status_repair = $request->status_repair;
             $list_of_repairs->date_for_update = new DateTime();
+            $list_of_repairs->operator = $request->operator != null ? $request->operator : '';
         }
+        
         $list_of_repairs->description = $request->description;
+        $list_of_repairs->new_update_active = "";
 
         $list_of_repairs->update();
 
@@ -49,7 +52,13 @@ class List_repairController extends Controller
     }
 
     public function process_repair($id){
+
+        $checked_update = list_of_repairs::find($id);
+        $checked_update->new_update_active = $checked_update->new_update_active != '' ? $checked_update->new_update_active . ',' . session('user_auth')[0]->user_id : session('user_auth')[0]->user_id;
+        $checked_update->update();
+
         $list_of_repair = list_of_repairs::leftjoin('list_of_imgs', 'list_of_imgs.list_repair_id', '=', 'list_of_repairs.list_repair_id')->where('list_of_repairs.list_repair_id', '=', $id)->get();
+
         return view('process_repair', compact(['list_of_repair', 'id']));
     }
 
@@ -60,6 +69,7 @@ class List_repairController extends Controller
         $list_of_repairs->status_repair = "ยังไม่ดำเนินการ";
         $list_of_repairs->editor = $request->editor;
         $list_of_repairs->notifier = session('user_auth')[0]->user_firstname . " (". session('user_auth')[0]->user_nickname .")";
+        $list_of_repairs->approve_report = false;
 
         $list_of_repairs->save();
 
