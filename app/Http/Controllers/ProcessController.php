@@ -183,7 +183,7 @@ class ProcessController extends Controller
         $user_account->user_begindatetowork = $request->user_begindatetowork;
         $user_account->user_birth = $request->user_birth;
         $user_account->user_contrack = "";
-        $user_account->user_rule_status = 0;
+        $user_account->user_rule_status = 1;
         $user_account->user_sick_leave = 0;
         $user_account->user_personal_leave = 0;
         $user_account->user_vacation_leave = 0;

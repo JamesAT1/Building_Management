@@ -48,15 +48,47 @@
                                 <br />
                             </div>
                             <div class="col-12">
-                              <label>มอบหมายให้</label>
-                             <select class="form-select assignment" required name="editor">
-                                 <option value="">ระบุ</option>
-                                 <option value="Operator">Operation</option>
-                                 <option value="Reception">Reception</option>
-                                 <option value="Engineer">Engineer</option>
-                                 <option value="Programmer">Programmer</option>
-                                 <option value="Other">Other</option>
-                             </select>
+                            <div class="card">
+                                <div class="card-body">
+                                    <label>มอบหมายให้</label>
+                                    <br />
+                                    <br />
+                                      <div class="row">
+                                          <div class="col-sm-4 col-md-2">
+                                              <div class="form-check">
+                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Operation" id="Operation">
+                                                  <label class="form-check-label" for="Operation">
+                                                      Operator
+                                                  </label>
+                                                </div>
+                                          </div>
+                                          <div class="col-sm-4 col-md-2">
+                                              <div class="form-check">
+                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Reception" id="Reception">
+                                                  <label class="form-check-label" for="Reception">
+                                                      Reception
+                                                  </label>
+                                                </div>
+                                          </div>
+                                          <div class="col-sm-4 col-md-2">
+                                              <div class="form-check">
+                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Engineer" id="Engineer">
+                                                  <label class="form-check-label" for="Engineer">
+                                                      Engineer
+                                                  </label>
+                                                </div>
+                                          </div>
+                                          <div class="col-sm-4 col-md-2">
+                                              <div class="form-check">
+                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Programmer" id="Programmer">
+                                                  <label class="form-check-label" for="Programmer">
+                                                      Programmer
+                                                  </label>
+                                                </div>
+                                          </div>
+                                      </div>
+                                </div>
+                            </div>
                              <br />
                              <div class="other">
 
@@ -64,7 +96,7 @@
                             </div>
                             <div class="col-12">
                                 <br />
-                                <label>ไฟล์ประกอบ (ถ้ามี, สูงสุด 2 รูป)</label>
+                                <label>ภาพประกอบ (ถ้ามี, สูงสุด 2 รูป)</label>
                                 <div class="row" id="layout_img">
                                     <div class="col-12">
                                     </div>
@@ -80,7 +112,7 @@
                             </div>
                             <div class="col-12">
                             <br />
-                                <button type="submit" class="form-control btn btn-info">สร้างรายงานการแจ้งซ่อม</button>
+                                <button type="submit" id="submit" class="form-control btn btn-info">สร้างรายงานการแจ้งซ่อม</button>
                                 <a href="{{url('/list_repairs')}}" class="form-control btn">ย้อนกลับ</a>
                             </div>
                         </div>
@@ -92,11 +124,28 @@
         </div>
     </div>
     @endsection
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
             $('.add_img').click(function() {
                 if($('.img_dec').length < 1){
                     $('#layout_img').append('<div class="col-3 img_dec"><input type="file" name="img_name[]" class="form-control"/></div>');
+                }
+            });
+
+            $('#submit').click(function () { 
+                checked = $('input[type=checkbox]:checked').length;
+                
+                if(!checked){
+                    Swal.fire({
+                        title: 'ผิดผลาด!',
+                        text: 'เช็คข้อมูลให้ครบถ้วน',
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        allowOutsideClick: false,
+                        confirmButtonText: 'ตกลง',
+                    });
+                    return false;
                 }
             });
 

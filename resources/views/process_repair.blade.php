@@ -31,12 +31,21 @@
         <div class="col-1">
         </div>
         <div class="col-10">
+            <form action="{{url('process_repair_update')}}" method="post" enctype="multipart/form-data">
+                @csrf
             <div class="card">
                 <div class="card-header">
-                    <h5>สร้างรายงานการแจ้งซ่อม/งานที่มอบหมาย</h5>
+                    <h5>สร้างรายงานการแจ้งซ่อม/งานที่มอบหมาย
+                        @if(session('user_auth')[0]->user_rule_status == 0 && $list_of_repair[0]->status_repair == "ดำเนินการสำเร็จ")
+                            @if($list_of_repair[0]->approve_report == false)
+                            <span id="approved_status"></span>
+                                <button type="submit" style="float: right;" class="btn btn-success approved">ยืนยันการเสร็จสิ้น</button>
+                            @else
+                                <button disabled style="float: right;" class="btn btn-outline-success">เสร็จสิ้นแล้ว</button>
+                            @endif
+                        @endif
+                    </h5>
                 </div>
-                <form action="{{url('process_repair_update')}}" method="post" enctype="multipart/form-data">
-                    @csrf
                     <input type="hidden" name="list_repair_id" value="{{$id}}">
                     <div class="card-body">
                         <div class="row">
@@ -65,7 +74,7 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <label>
-                                                        แนบไฟล์ประกอบ
+                                                        ภาพประกอบ
                                                     </label>
                                                     <div class="row">
                                                         @for($i = 0; $i < count($list_of_repair); $i++)
@@ -100,7 +109,7 @@
                                         <label>
                                             สถานะ
                                         </label>
-                                        <select required class="form-select select_status" name="status_repair">
+                                        <select required class="form-select select_status" name="status_repair" {{$list_of_repair[0]->approve_report == false ? "" : "disabled"}}>
                                             @if($list_of_repair[0]->status_repair != "ยังไม่ดำเนินการ")
                                                     <option value="{{$list_of_repair[0]->status_repair}}">{{$list_of_repair[0]->status_repair}}</option>
                                                 @if($list_of_repair[0]->status_repair == "กำลังดำเนินการ")
@@ -125,7 +134,7 @@
                                             หมายเหตุ/รายละเอียด
                                         </label>
                                         <br />
-                                            <textarea rows="4" class="form-control" placeholder="อัพเดทงาน เช่น &#10; 1.กำลังดำเนินการ &#10; 2.เสร็จสิ้น" name="description">{{$list_of_repair[0]->description}}</textarea>
+                                            <textarea rows="4" {{$list_of_repair[0]->approve_report == false ? "" : "disabled"}} class="form-control" name="description">{{$list_of_repair[0]->description}}</textarea>
                                     </div>
                                 </div>
                                 @endif
@@ -135,7 +144,7 @@
                                     <div class="card select-operator">
                                         <div class="card-body">
                                             <label>เสร็จสิ้นโดย</label>
-                                            <select class="form-select select-operator" id="operator" onchange="other_seelect(this.value)" required name="operator">
+                                            <select class="form-select select-operator" id="operator" onchange="other_seelect(this.value)" {{$list_of_repair[0]->approve_report == false ? "" : "disabled"}} required name="operator">
                                                 <option value="{{$list_of_repair[0]->operator}}">{{$list_of_repair[0]->operator}}</option>
                                                 @if($list_of_repair[0]->operator != 'Operator')
                                                     <option value="Operator">Operation</option>
@@ -161,17 +170,18 @@
                               
                             </div>
                             <div class="col-12">
-                                <br />
-                                <br />
-                                <button type="submit" class="form-control btn btn-info">อัพเดทรายงาน</button>
-                                <a href="{{url('/list_repairs')}}" class="form-control btn">ย้อนกลับ</a>
+                                @if($list_of_repair[0]->approve_report == false)
+                                    <br />
+                                    <br />
+                                    <button type="submit" class="form-control btn btn-info">อัพเดทรายงาน</button>
+                                @endif
+                                <a href="{{url($list_of_repair[0]->approve_report == false ? "/list_repairs" : "/history_list_of_repair")}}" class="form-control btn">ย้อนกลับ</a>
                                 <br />
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-        </div>
         <div class="col-1">
         </div>
     </div>
@@ -184,7 +194,7 @@
                 if($('.select_status').val() === "ดำเนินการสำเร็จ" && $('.select-operator').length < 1){
                     $('.operator').append('<div class="card select-operator">' +
                     '<div class="card-body">' +
-                        '<label>แก้ไขโดย</label>' +
+                        '<label>ปฎิบัติงานโดย/แก้ไขโดย</label>' +
                             '<select class="form-select select-operator" id="operator" onchange="other_seelect(this.value)" required name="operator">' +
                                 '<option value="">ระบุ</option>' +
                                 '<option value="Operator">Operation</option>' +
@@ -198,6 +208,26 @@
                 }else{
                     $('.select-operator').remove();
                 }
+            });
+            
+            $('.approved').click(function (e) { 
+                e.preventDefault();
+                var form = $(this).closest('form');
+                Swal.fire({
+                    title: 'ยืนยัน?',
+                    text: 'ยืนยันการอนุมัติว่าได้เสร็จสิ้นเรียบร้อยแล้ว',
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    showCancelButton: true,
+                    confirmButtonText: 'ตกลง',
+                    cancelButtonText: 'ยกเลิก',
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        $('#approved_status').append('<input type="hidden" name="approved" value="true">');
+                        form.submit();
+                    }
+                });
             });
 
             $('.select_status').change(function () { 
@@ -219,7 +249,7 @@
             if(e === "Other"){
                 $('#other').append('<div class="card text-other">' +
                     '<div class="card-body">' +
-                '<div><label>ระบุ ทีม/พนักงาน ที่ต้องการมอบหมาย</label><input class="form-control" name="operator" required placeholder="กรอก"/></div>' +
+                '<div><label>ระบุ ทีม/พนักงาน ที่ต้องการมอบหมาย</label><input class="form-control" name="operator" required placeholder="เช่น Operator/Reception"/></div>' +
                 '</div>' +
             '</div>');
             }else{

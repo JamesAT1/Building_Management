@@ -54,7 +54,7 @@
                 </div>
                 <div>
                     <br />
-                    <a href="{{url('/history_list_of_repair')}}" class="btn btn-light" style="margin-left: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> ดูประวัติที่เสร็จสิ้นแล้ว</a>
+                    <a href="{{url('list_repairs')}}" class="btn btn-light" style="margin-left: 10px;">ย้อนกลับ</a>
                 </div>
                 <div class="card-body">
                    
@@ -112,11 +112,7 @@
                                     @endif
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{$list_of_repair->notifier}}</center></td>
                                         <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'"><center>{{$list_of_repair->editor}}</center></td>
-                                    @if($list_of_repair->status_repair == "ยังไม่ดำเนินการ")
-                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: red;"><center>ยังไม่ดำเนินการ</center></td>
-                                    @elseif($list_of_repair->status_repair == "กำลังดำเนินการ")
-                                        <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: #f1c02b;"><center>กำลังดำเนินการ</center></td>
-                                    @elseif($list_of_repair->status_repair == "ดำเนินการสำเร็จ")
+                                    @if($list_of_repair->status_repair == "ดำเนินการสำเร็จ")
                                         @if($list_of_repair->approve_report != true)
                                             <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'" style="color: rgb(0, 182, 9);"><center>รออนุมัติ</center></td>
                                         @else

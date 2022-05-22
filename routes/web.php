@@ -68,8 +68,9 @@ Route::middleware(['check_login'])->group(function () {
     //List_RepairControler
     Route::get('/list_repairs', [List_repairController::class, 'list_repair']);
     Route::get('/insert_list_repair', [List_repairController::class, 'form_list_repair']);
-    Route::post('/insert_list_repair/add', [List_repairController::class, 'insert_list_repair']);
+    Route::get('/history_list_of_repair', [List_repairController::class, 'history_list_of_repair']);
     Route::get('/process_repair/{id}', [List_repairController::class, 'process_repair']);
+    Route::post('/insert_list_repair/add', [List_repairController::class, 'insert_list_repair']);
     Route::post('/set_bookmark', [List_repairController::class, 'set_bookmark']);
     Route::post('/process_repair_update', [List_repairController::class, 'process_repair_update']);
     
