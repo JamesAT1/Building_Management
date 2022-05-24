@@ -12,6 +12,7 @@ class machine_rooms_check_days extends Model
     protected $fillable = [
         'machine_rooms_check_day_id',
         'machine_room_id',
+        'date_id',
         'machine_rooms_check_day_status',
         'machine_rooms_check_day_description',
         'shift_worker_time',

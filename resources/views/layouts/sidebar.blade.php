@@ -97,7 +97,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{url('/list_repairs')}}" class="nav-link {{ (request()->is('list_repairs')) ? 'active' : '' || (request()->is('process_repair/*')) ? 'active' : '' || (request()->is('insert_list_repair')) ? 'active' : ''}} ">
+          <a href="{{url('/list_repairs')}}" class="nav-link {{ (request()->is('list_repairs')) ? 'active' : '' || (request()->is('process_repair/*')) ? 'active' : '' || (request()->is('insert_list_repair')) ? 'active' : '' || (request()->is('history_list_of_repair')) ? 'active' : '' || (request()->is('modify_repair/*')) ? 'active' : '' || (request()->is('list_repairs/select')) ? 'active' : '' }} ">
             <i class="fa-solid nav-icon fas fa-screwdriver-wrench"></i>
             <p>
               งานที่มอบหมาย/แจ้งซ่อม

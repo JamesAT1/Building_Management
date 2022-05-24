@@ -11,6 +11,8 @@ use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use Phattarachai\LaravelMobileDetect\Agent;
 
 date_default_timezone_set('Asia/Bangkok');
@@ -36,6 +38,7 @@ class MachineController extends Controller
                         $machine_rooms_check_day->machine_room_id = $machine_room->machine_room_id;
                         $machine_rooms_check_day->machine_rooms_check_day_status = "ยังไม่ตรวจสอบ";
                         $machine_rooms_check_day->shift_worker_time = $i;
+                        $machine_rooms_check_day->date_id = $date_for_checkings->date_id;
                         $machine_rooms_check_day->save();
                     }
                 }
@@ -65,28 +68,30 @@ class MachineController extends Controller
 
         foreach ($date_for_checkings as $date_for_checking) {
             $machine_rooms_check_days[] = machine_rooms_check_days::all()
-            ->where('created_at', '>', $date_for_checking->start_date)
-            ->where('created_at', '<', $date_for_checking->end_date);
+                ->where('created_at', '>', $date_for_checking->start_date)
+                ->where('created_at', '<', $date_for_checking->end_date);
         }
         $row_checked = "7";
         $date_checked = $date_for_checkings != null ? $date_for_checkings[0]->start_date : "00-00-0000 00:00:00";
         return view('report_check_machine', compact(['machine_rooms_check_days', 'machine_rooms', 'date_for_checkings', 'row_checked', 'date_checked', 'date_for_select']));
     }
 
-    public function detail_report_check_machine($id, $room, $room_level){
+    public function detail_report_check_machine($id, $room, $room_level)
+    {
         $machine_rooms_check_day = machine_rooms_check_days::find($id);
         return view('detail_report_check_machine', compact(['machine_rooms_check_day', 'room', 'room_level']));
     }
 
-    public function row_report_check_machine(Request $request){
+    public function row_report_check_machine(Request $request)
+    {
         $date_for_select = date_for_checkings::orderByDesc('start_date')->get();
         $date_for_checkings = date_for_checkings::where('start_date', '<=', $request->date_checked)->orderByDesc('start_date')->limit($request->row_date_checked)->get();
         $machine_rooms = machine_room::orderByDESC('machine_room_level')->get();
 
         foreach ($date_for_checkings as $date_for_checking) {
             $machine_rooms_check_days[] = machine_rooms_check_days::all()
-            ->where('created_at', '>', $date_for_checking->start_date)
-            ->where('created_at', '<', $date_for_checking->end_date);
+                ->where('created_at', '>', $date_for_checking->start_date)
+                ->where('created_at', '<', $date_for_checking->end_date);
         }
         $row_checked = $request->row_date_checked;
         $date_checked = $request->date_checked;
@@ -103,6 +108,7 @@ class MachineController extends Controller
         $morning = 0;
         $afternoon = 0;
         $evening = 0;
+
         foreach ($machine_rooms_check_days as $machine_rooms_check_day) {
             if ($machine_rooms_check_day->machine_rooms_check_day_status == "ปกติ" || $machine_rooms_check_day->machine_rooms_check_day_status == "พบปัญหาและแก้ไขแล้ว" || $machine_rooms_check_day->machine_rooms_check_day_status == "พบปัญหา") {
                 $checked++;
@@ -165,10 +171,13 @@ class MachineController extends Controller
         $machine_rooms_check_days->machine_room_problem = $request->machine_room_problem != null ? $request->machine_room_problem : "";
 
         if ($request->file('img_for_checked') != null) {
-            $name_generagtion = hexdec(uniqid());
-            $name_set = $name_generagtion . $machine_rooms_check_days->machine_room_id . ($dt = new DateTime())->format('d-m-Y-H-i-s') . "." . ($request->img_for_checked->getClientOriginalExtension() == "" ? "jpg" : $request->img_for_checked->getClientOriginalExtension());
-            $request->file('img_for_checked')->move('img/img_for_checked', $name_set);
-            $machine_rooms_check_days->img_for_checked = $name_set;
+
+            $dt = new DateTime();
+            $date_for_checkings = date_for_checkings::orderByDesc('start_date')->first();
+
+
+            $resized = $this->resize_image($request->file('img_for_checked'), "/img/img_for_checked/" . (new datetime($date_for_checkings->start_date))->format('ตรวจห้องเครื่องวันที่ d-m-Y') . "/", 700);
+            $machine_rooms_check_days->img_for_checked = $resized;
         } else {
             return redirect('check_machine');
         }
@@ -178,13 +187,11 @@ class MachineController extends Controller
         if ($request->file('machine_description_image') != null) {
             $i = 0;
             foreach ($request->file('machine_description_image') as $save_data_problem) {
-                $name_generagtion = hexdec(uniqid());
-                $name_set = $name_generagtion . "." . ($save_data_problem->getClientOriginalExtension() == "" ? "jpg" : $save_data_problem->getClientOriginalExtension());
-                ($request->file('machine_description_image')[$i++])->move("img/errormachine", $name_set);
+                $resized = $this->resize_image($save_data_problem, "/img/errormachine/", 700);
 
                 $machine_description = new machine_descriptions;
                 $machine_description->machine_rooms_check_day_id = $request->machine_rooms_check_day_id;
-                $machine_description->machine_description_image = $name_set;
+                $machine_description->machine_description_image = $resized;
                 $machine_description->save();
             }
         }
@@ -242,10 +249,27 @@ class MachineController extends Controller
         return view('detail_check_machine', compact(['machine_rooms', 'machine_descriptions', 'room']));
     }
 
+    public function dalete_date_for_checkings(Request $request)
+    {
+        if (isset($request->date_delete)) {
+            foreach ($request->date_delete as $date_delete) {
+
+                $machine_rooms_check_days = machine_rooms_check_days::where('date_id', "=", $date_delete)->get();
+
+                foreach ($machine_rooms_check_days as $machine_rooms_check_day) {
+                    $machine_rooms_check_day->delete();
+                }
+                
+                date_for_checkings::find($date_delete)->delete();
+            }
+        };
+
+        return redirect()->back();
+    }
+
     public function add_machine(Request $request)
     {
         $machine_room = new machine_room;
-
         $machine_room->machine_room_number = $request->machine_room_number;
         $machine_room->machine_room_level = $request->machine_room_level;
         $machine_room->machine_room_detail = $request->machine_room_detail == null ? $request->machine_room_detail = '' : $request->machine_room_detail;
@@ -334,5 +358,25 @@ class MachineController extends Controller
         $check_processes->log_agent = $agent->platform();
 
         $check_processes->save();
+    }
+
+    private function resize_image($image_file, $Image_path, $width_resize)
+    {
+        $Image = Image::make($image_file);
+        $Image_path = public_path($Image_path);
+
+        if (!File::exists($Image_path)) {
+            File::makeDirectory($Image_path);
+        }
+
+        $image_name = hexdec(uniqid()) . (new DateTime())->format('d-m-Y-H-i-s') . '.jpg';
+
+        $Image->resize($width_resize, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+
+        $Image->save($Image_path . $image_name);
+
+        return $image_name;
     }
 }

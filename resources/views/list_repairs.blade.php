@@ -55,6 +55,29 @@
                 <div>
                     <br />
                     <a href="{{url('/history_list_of_repair')}}" class="btn btn-light" style="margin-left: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> ดูประวัติที่เสร็จสิ้นแล้ว</a>
+                    <span style="float: right; margin-right: 15px;">
+                        <form method="POST" action="{{url('/list_repairs/select')}}">
+                            @csrf
+                            <select class="form-select" name="editor" onchange="this.form.submit()">
+                                <option value="">{{$editor != null ? $editor : ทั้งหมด}}</option>
+                                @if($editor != "Reception")
+                                    <option value="Reception">Reception</option>
+                                @endif
+                                @if($editor != "Operation")
+                                    <option value="Operation">Operation</option>
+                                @endif
+                                @if($editor != "Programmer")
+                                    <option value="Programmer">Programmer</option>
+                                @endif
+                                @if($editor != "Engineer")
+                                    <option value="Engineer">Engineer</option>
+                                @endif
+                                @if($editor != "Sustain")
+                                    <option value="Sustain">Sustain</option>
+                                @endif
+                            </select>
+                        </form>
+                    </span>
                 </div>
                 <div class="card-body">
                    
@@ -71,22 +94,14 @@
                                 <th width="13%"><center>มอบหมาย</center></th>
                                 <th width="10%"><center>สถานะ</center></th>
                                 <th width="20%">หมายเหตุ/รายละเอียด</th>
+                                <th width="1%"><center>แก้ไข</center></th>
+                                <th width="1%"><center>ลบ</center></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $count_repair = 1 ?>
                             @foreach($list_of_repairs as $list_of_repair)
-                                @if($list_of_repair->editor == "Reception")
-                                    <tr style="background-color: rgb(222, 227, 235)">
-                                @elseif($list_of_repair->editor == "Programmer")
-                                    <tr style="background-color: #f1dcdc">
-                                @elseif($list_of_repair->editor == "Operation")
-                                    <tr style="background-color: #d4eae6">
-                                @elseif($list_of_repair->editor == "Engineer")
-                                    <tr style="background-color: #fff6d7">
-                                @else
-                                    <tr>
-                                @endif
+                                <tr>
                                     <td>
                                         <form action="{{url('set_bookmark')}}" method="post">
                                             @csrf
@@ -131,14 +146,20 @@
                                             @endif
                                                 <?php $count_update = 0 ?>
                                                 @foreach(explode(',', $list_of_repair->new_update_active) as $acount_id)
-                                                    <?php $count_update++ ?>
-                                                    @if($acount_id == session('user_auth')[0]->user_id)
-                                                        <?php break; ?>
-                                                    @elseif(count(explode(',', $list_of_repair->new_update_active)) == $count_update && $acount_id != session('user_auth')[0]->user_id)
-                                                        <span style="position: absolute; right:5%; top:30%;" class="badge bg-danger"><span style="color:white;">update</span></span>
+                                                    @if($acount_id != "0")
+                                                        <?php $count_update++ ?>
+                                                        @if($acount_id == session('user_auth')[0]->user_id)
+                                                            <?php break; ?>
+                                                        @elseif(count(explode(',', $list_of_repair->new_update_active)) == $count_update && $acount_id != session('user_auth')[0]->user_id)
+                                                            <span style="position: absolute; right:5%; top:30%;" class="badge bg-danger"><span style="color:white;">update</span></span>
+                                                        @endif
+                                                    @else
+                                                        <span style="position: absolute; right:5%; top:30%;" class="badge bg-success"><span style="color:white;">new</span></span>
                                                     @endif
                                                 @endforeach
                                         </td>
+                                        <td><a href="{{url('/form_modify_repair/'.$list_of_repair->list_repair_id)}}" class="btn btn-sm btn-outline-warning"><i class="fa-solid fa-pen"></i></a></td>
+                                        <td><a href="#" onclick="delete_repair('{{$list_of_repair->list_repair_id}}')" class="btn btn-sm btn-outline-danger delete_list"><i class="fa-solid fa-trash"></i></a></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -147,7 +168,25 @@
             </div>
         </div>
     @endsection
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function delete_repair(id){
+            Swal.fire({
+                title: 'ลบข้อมูล?',
+                text: "คุณต้องการลบข้อมูลรายงาน ใช่หรือไม่",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ตกลง',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.href = "/remove_repair/" + id;
+                }
+            });
+        }
+    </script>
    
 </body>
 

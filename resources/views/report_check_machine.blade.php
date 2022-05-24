@@ -65,9 +65,13 @@
                                 <input type="number" max="7" min="1" placeholder="แถวในการแสดงผล" value="{{$row_checked != null ? $row_checked : "7"}}" class="form-control" name="row_date_checked" />
                             </div>
                             <div class="col-12">
-                                <button style="float: right" type="submit" class="btn btn-info my-2">แสดงการค้นหา &emsp;<i class="fa-solid fa-magnifying-glass"></i></button>
+                                <span style="float: right">
+                                    <button type="submit" class="btn btn-info my-2">แสดงการค้นหา &emsp;<i class="fa-solid fa-magnifying-glass"></i></button>
+                                    <button type="submit" class="btn btn-danger my-2" id="btn_delete_date" form="delete_date" disabled>ลบข้อมูล &emsp;<i class="fa-solid fa-trash-can"></i></button>
+                                </span>
                             </div>
                         </form>
+                        
                         <div style="overflow-x:auto;">
                                 <div class="table_report">
                                     <br />
@@ -79,20 +83,25 @@
                                                     <br />
                                                     <br />
                                                 </th>
-                                                @foreach($date_for_checkings as $date_for_checking)
-                                                    <th width="300px;">
-                                                        <div class="row" align="center">
-                                                            <div class="col-12">
-                                                                {{(new DateTime($date_for_checking->start_date))->format('d/m/Y')}}
-                                                                <br />
-                                                                <br />
+                                                <?php $count_date_for_checking = 0 ?>
+                                                <form method="post" id="delete_date" action="{{url('/dalete_date_for_checkings')}}"> 
+                                                    {{-- {{url('dalete_date_for_checkings')}} --}}
+                                                    @foreach($date_for_checkings as $date_for_checking)
+                                                        <?php $count_date_for_checking++ ?>
+                                                        <th width="300px;">
+                                                            <div class="row" align="center">
+                                                                <div class="col-12">
+                                                                            @csrf
+                                                                            <input type="checkbox" class="form-check-input value_date" name="date_delete[]" id="checkbox_date{{$count_date_for_checking}}" value="{{$date_for_checking->date_id}}"/>
+                                                                            <label for="checkbox_date{{$count_date_for_checking}}">{{(new DateTime($date_for_checking->start_date))->format('d/m/Y')}}</label>
+                                                                </div>
+                                                                <div class="col-4">เช้า</div>
+                                                                <div class="col-4">บ่าย</div>
+                                                                <div class="col-4">ค่ำ</div>
                                                             </div>
-                                                            <div class="col-4">เช้า</div>
-                                                            <div class="col-4">บ่าย</div>
-                                                            <div class="col-4">ค่ำ</div>
-                                                        </div>
-                                                    </th> 
-                                                @endforeach
+                                                        </th> 
+                                                    @endforeach
+                                                </form>
                                             </tr>
                                         </thead>
                                         <tbody class="table-bordered">
@@ -142,22 +151,34 @@
     @endsection
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-              function delete_machine_room(pNumber, id){
-                Swal.fire({
-                    title: 'ลบข้อมูล?',
-                    text: "คุณต้องการลบข้อมูลห้อง " + pNumber + " ใช่หรือไม่",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ตกลง',
-                    cancelButtonText: 'ยกเลิก'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.href = "/remove_machine_room/" + id;
-                        }
-                    });
-              }
+            $(document).ready(function () {
+                $('.value_date').click(function () { 
+                    var count = $('input:checkbox:checked').length;
+                    if(count > 0){
+                        $('#btn_delete_date').removeAttr('disabled', false);
+                    }else if(count == 0){
+                        $('#btn_delete_date').prop('disabled', true);
+                    }
+                });
+            
+                $('#btn_delete_date').click(function (e) { 
+                    e.preventDefault();
+                    Swal.fire({
+                       title: 'ลบข้อมูล?',
+                       text: "คุณต้องการลบข้อมูลห้อง ใช่หรือไม่",
+                       icon: 'warning',
+                       showCancelButton: true,
+                       confirmButtonColor: '#3085d6',
+                       cancelButtonColor: '#d33',
+                       confirmButtonText: 'ตกลง',
+                       cancelButtonText: 'ยกเลิก'
+                       }).then((result) => {
+                           if (result.isConfirmed) {
+                               $('#delete_date').submit();
+                           }
+                       });
+                });
+            });
     </script>
 </body>
 

@@ -19,6 +19,9 @@
     <title>Builder Management Program</title>
 
     <style>
+        *{
+            font-size: 0.94rem;
+        }
         .error-message{
             font-size: 0.8rem;
             color: red;
@@ -54,38 +57,46 @@
                                     <br />
                                     <br />
                                       <div class="row">
-                                          <div class="col-sm-4 col-md-2">
-                                              <div class="form-check">
-                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Operation" id="Operation">
-                                                  <label class="form-check-label" for="Operation">
-                                                      Operator
-                                                  </label>
-                                                </div>
-                                          </div>
-                                          <div class="col-sm-4 col-md-2">
-                                              <div class="form-check">
-                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Reception" id="Reception">
-                                                  <label class="form-check-label" for="Reception">
-                                                      Reception
-                                                  </label>
-                                                </div>
-                                          </div>
-                                          <div class="col-sm-4 col-md-2">
-                                              <div class="form-check">
-                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Engineer" id="Engineer">
-                                                  <label class="form-check-label" for="Engineer">
-                                                      Engineer
-                                                  </label>
-                                                </div>
-                                          </div>
-                                          <div class="col-sm-4 col-md-2">
-                                              <div class="form-check">
-                                                  <input class="form-check-input" type="checkbox" name="editor[]" value="Programmer" id="Programmer">
-                                                  <label class="form-check-label" for="Programmer">
-                                                      Programmer
-                                                  </label>
-                                                </div>
-                                          </div>
+                                        <div class="col-sm-4 col-md-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="editor[]" value="Operation" id="Operation">
+                                                <label class="form-check-label" for="Operation">
+                                                    Operation
+                                                </label>
+                                              </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="editor[]" value="Reception" id="Reception">
+                                                <label class="form-check-label" for="Reception">
+                                                    Reception
+                                                </label>
+                                              </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="editor[]" value="Engineer" id="Engineer">
+                                                <label class="form-check-label" for="Engineer">
+                                                    Engineer
+                                                </label>
+                                              </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-2">
+                                          <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" name="editor[]" value="Sustian" id="Sustian">
+                                              <label class="form-check-label" for="Sustian">
+                                                  Sustian
+                                              </label>
+                                            </div>
+                                      </div>
+                                        <div class="col-sm-4 col-md-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="editor[]" value="Programmer" id="Programmer">
+                                                <label class="form-check-label" for="Programmer">
+                                                    Programmer
+                                                </label>
+                                              </div>
+                                        </div>
                                       </div>
                                 </div>
                             </div>
@@ -95,7 +106,6 @@
                              </div>
                             </div>
                             <div class="col-12">
-                                <br />
                                 <label>ภาพประกอบ (ถ้ามี, สูงสุด 2 รูป)</label>
                                 <div class="row" id="layout_img">
                                     <div class="col-12">
@@ -108,11 +118,10 @@
                                 <input type="button" class="btn btn-sm btn-info add_img" value="เพิ่ม" />
                                 <input type="button" class="btn btn-sm btn-danger remove_img" value="ลบ" />
                                 <br />
-                                <br />
                             </div>
                             <div class="col-12">
                             <br />
-                                <button type="submit" id="submit" class="form-control btn btn-info">สร้างรายงานการแจ้งซ่อม</button>
+                                <button type="submit" id="submit" class="form-control btn btn-info">สร้างรายงาน</button>
                                 <a href="{{url('/list_repairs')}}" class="form-control btn">ย้อนกลับ</a>
                             </div>
                         </div>

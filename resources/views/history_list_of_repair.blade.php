@@ -76,17 +76,7 @@
                         <tbody>
                             <?php $count_repair = 1 ?>
                             @foreach($list_of_repairs as $list_of_repair)
-                                @if($list_of_repair->editor == "Reception")
-                                    <tr style="background-color: rgb(222, 227, 235)">
-                                @elseif($list_of_repair->editor == "Programmer")
-                                    <tr style="background-color: #f1dcdc">
-                                @elseif($list_of_repair->editor == "Operation")
-                                    <tr style="background-color: #d4eae6">
-                                @elseif($list_of_repair->editor == "Engineer")
-                                    <tr style="background-color: #fff6d7">
-                                @else
-                                    <tr>
-                                @endif
+                                <tr>
                                     <td>
                                         <form action="{{url('set_bookmark')}}" method="post">
                                             @csrf
