@@ -83,9 +83,9 @@
                                         </div>
                                         <div class="col-sm-4 col-md-2">
                                           <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="editor[]" value="Sustian" id="Sustian">
-                                              <label class="form-check-label" for="Sustian">
-                                                  Sustian
+                                              <input class="form-check-input" type="checkbox" name="editor[]" value="Sustain" id="Sustain">
+                                              <label class="form-check-label" for="Sustain">
+                                                    Sustain
                                               </label>
                                             </div>
                                       </div>

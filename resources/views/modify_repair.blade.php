@@ -112,9 +112,9 @@
                                             </div>
                                             <div class="col-sm-4 col-md-2">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="editor[]" value="Sustian" id="Sustian"  @if (strpos($repair[0]->editor, 'Sustian') !== false )  checked  @endif>
-                                                    <label class="form-check-label" for="Sustian">
-                                                        Sustian
+                                                    <input class="form-check-input" type="checkbox" name="editor[]" value="Sustain" id="Sustain"  @if (strpos($repair[0]->editor, 'Sustain') !== false )  checked  @endif>
+                                                    <label class="form-check-label" for="Sustain">
+                                                        Sustain
                                                     </label>
                                                 </div>
                                             </div>

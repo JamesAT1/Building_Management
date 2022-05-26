@@ -72,14 +72,16 @@ class MachineController extends Controller
                 ->where('created_at', '<', $date_for_checking->end_date);
         }
         $row_checked = "7";
+
         $date_checked = $date_for_checkings != null ? $date_for_checkings[0]->start_date : "00-00-0000 00:00:00";
         return view('report_check_machine', compact(['machine_rooms_check_days', 'machine_rooms', 'date_for_checkings', 'row_checked', 'date_checked', 'date_for_select']));
     }
 
-    public function detail_report_check_machine($id, $room, $room_level)
+    public function detail_report_check_machine($id, $room, $room_level, $date_check)
     {
         $machine_rooms_check_day = machine_rooms_check_days::find($id);
-        return view('detail_report_check_machine', compact(['machine_rooms_check_day', 'room', 'room_level']));
+
+        return view('detail_report_check_machine', compact(['machine_rooms_check_day', 'room', 'room_level', 'date_check']));
     }
 
     public function row_report_check_machine(Request $request)
@@ -246,7 +248,7 @@ class MachineController extends Controller
                 ->get();
         }
 
-        return view('detail_check_machine', compact(['machine_rooms', 'machine_descriptions', 'room']));
+        return view('detail_check_machine', compact(['machine_rooms', 'machine_descriptions', 'room', 'date_for_checkings']));
     }
 
     public function dalete_date_for_checkings(Request $request)
@@ -255,12 +257,17 @@ class MachineController extends Controller
             foreach ($request->date_delete as $date_delete) {
 
                 $machine_rooms_check_days = machine_rooms_check_days::where('date_id', "=", $date_delete)->get();
-
-                foreach ($machine_rooms_check_days as $machine_rooms_check_day) {
-                    $machine_rooms_check_day->delete();
+                if($machine_rooms_check_days != null){
+                    foreach ($machine_rooms_check_days as $machine_rooms_check_day) {
+                        $machine_rooms_check_day->delete();
+                    }
                 }
-                
-                date_for_checkings::find($date_delete)->delete();
+
+                $date_for_checking = date_for_checkings::find($date_delete);
+
+                if ($date_for_checking != null) {
+                    $date_for_checking->delete();
+                }
             }
         };
 
@@ -273,6 +280,7 @@ class MachineController extends Controller
         $machine_room->machine_room_number = $request->machine_room_number;
         $machine_room->machine_room_level = $request->machine_room_level;
         $machine_room->machine_room_detail = $request->machine_room_detail == null ? $request->machine_room_detail = '' : $request->machine_room_detail;
+        $date_for_checkings = date_for_checkings::orderByDesc('start_date')->first();
 
         $machine_room->save();
 
@@ -280,6 +288,7 @@ class MachineController extends Controller
             $machine_rooms_check_days = new machine_rooms_check_days;
             $machine_rooms_check_days->machine_room_id = $machine_room->machine_room_id;
             $machine_rooms_check_days->machine_rooms_check_day_status = "ยังไม่ตรวจสอบ";
+            $machine_rooms_check_days->date_id = $date_for_checkings->date_id;
             $machine_rooms_check_days->shift_worker_time = $i;
             $machine_rooms_check_days->save();
         }

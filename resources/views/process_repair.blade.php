@@ -155,6 +155,9 @@
                                                 @if($list_of_repair[0]->operator != 'Engineer')
                                                     <option value="Engineer">Engineer</option>
                                                 @endif
+                                                @if($list_of_repair[0]->operator != 'Sustain')
+                                                    <option value="Sustain">Sustain</option>
+                                                @endif
                                                 @if($list_of_repair[0]->operator != 'Programmer')
                                                     <option value="Programmer">Programmer</option>
                                                 @endif
@@ -197,9 +200,10 @@
                         '<label>ปฎิบัติงานโดย/แก้ไขโดย</label>' +
                             '<select class="form-select select-operator" id="operator" onchange="other_seelect(this.value)" required name="operator">' +
                                 '<option value="">ระบุ</option>' +
-                                '<option value="Operator">Operation</option>' +
+                                '<option value="Operation">Operation</option>' +
                                 '<option value="Reception">Reception</option>' +
                                 '<option value="Engineer">Engineer</option>' +
+                                '<option value="Sustain">Sustain</option>' +
                                 '<option value="Programmer">Programmer</option>' +
                                 '<option value="Other">Other</option>' +
                             '</select>' +

@@ -178,7 +178,6 @@ class ProcessController extends Controller
         $user_account->user_pass = $request->user_pass;
         $user_account->user_firstname = $request->user_firstname;
         $user_account->user_lastname = $request->user_lastname;
-        $user_account->user_img = $request->user_img;
         $user_account->user_nickname = $request->user_nickname;
         $user_account->user_begindatetowork = $request->user_begindatetowork;
         $user_account->user_birth = $request->user_birth;

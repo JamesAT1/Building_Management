@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,500;1,200&family=Sarabun:wght@200;400&family=Thasadith:ital@0;1&display=swap" rel="stylesheet">
@@ -54,7 +53,7 @@
                                     </option>
                                     @foreach($date_for_select as $date_for_select_data)
                                         @if($date_checked != $date_for_select_data->start_date)
-                                        <option value="{{$date_for_select_data->start_date}}">{{(new DateTime($date_for_select_data->start_date))->format('d-m-Y')}}</option>
+                                            <option value="{{$date_for_select_data->start_date}}">{{(new DateTime($date_for_select_data->start_date))->format('d-m-Y')}}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -67,11 +66,14 @@
                             <div class="col-12">
                                 <span style="float: right">
                                     <button type="submit" class="btn btn-info my-2">แสดงการค้นหา &emsp;<i class="fa-solid fa-magnifying-glass"></i></button>
-                                    <button type="submit" class="btn btn-danger my-2" id="btn_delete_date" form="delete_date" disabled>ลบข้อมูล &emsp;<i class="fa-solid fa-trash-can"></i></button>
+                                    @if($date_for_select != null && count($date_for_select) > 1)
+                                        <button type="submit" class="btn btn-danger my-2" id="btn_delete_date" form="delete_date" disabled>ลบข้อมูล &emsp;<i class="fa-solid fa-trash-can"></i></button>
+                                    @else
+                                        <button type="submit" class="btn btn-danger my-2" form="delete_date" disabled>ลบข้อมูล &emsp;<i class="fa-solid fa-trash-can"></i></button>
+                                    @endif
                                 </span>
                             </div>
                         </form>
-                        
                         <div style="overflow-x:auto;">
                                 <div class="table_report">
                                     <br />
@@ -91,15 +93,18 @@
                                                         <th width="300px;">
                                                             <div class="row" align="center">
                                                                 <div class="col-12">
-                                                                            @csrf
+                                                                    @csrf
+                                                                        @if($date_for_checking->end_date <= (new datetime())->format('Y-m-d 06:59:59'))
                                                                             <input type="checkbox" class="form-check-input value_date" name="date_delete[]" id="checkbox_date{{$count_date_for_checking}}" value="{{$date_for_checking->date_id}}"/>
-                                                                            <label for="checkbox_date{{$count_date_for_checking}}">{{(new DateTime($date_for_checking->start_date))->format('d/m/Y')}}</label>
+                                                                        @endif
+                                                                        
+                                                                        <label for="checkbox_date{{$count_date_for_checking}}">{{(new DateTime($date_for_checking->start_date))->format('d/m/Y')}}</label>
                                                                 </div>
                                                                 <div class="col-4">เช้า</div>
                                                                 <div class="col-4">บ่าย</div>
                                                                 <div class="col-4">ค่ำ</div>
                                                             </div>
-                                                        </th> 
+                                                        </th>
                                                     @endforeach
                                                 </form>
                                             </tr>
@@ -118,7 +123,7 @@
                                                                 @else
                                                                 @if($machine_rooms_check_day->machine_room_id == $machine_room->machine_room_id)
                                                                     <div class="col-4">
-                                                                        <a href="{{url('/detail_report_check_machine/'.$machine_rooms_check_day->machine_rooms_check_day_id."/".$machine_room->machine_room_number."/".$machine_room->machine_room_level)}}">
+                                                                        <a href="{{url('/detail_report_check_machine/'.$machine_rooms_check_day->machine_rooms_check_day_id."/".$machine_room->machine_room_number."/".$machine_room->machine_room_level."/".(new datetime($date_for_checkings[$count_date_for_check]->start_date))->format('d-m-Y'))}}">
                                                                         @if($machine_rooms_check_day->machine_rooms_check_day_status == "ยังไม่ตรวจสอบ")
                                                                             <i class="fa-solid fa-sm fa-circle" style="color:#f7dc48; font-size: 0.9rem;"></i> 
                                                                         @elseif($machine_rooms_check_day->machine_rooms_check_day_status == "ปกติ") 

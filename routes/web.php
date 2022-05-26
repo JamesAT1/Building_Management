@@ -44,7 +44,7 @@ Route::middleware(['check_login'])->group(function () {
     Route::get('/insert_machine', [MachineController::class, 'insert_machine']);
 
     Route::get('/report_check_machine', [MachineController::class, 'report_check_machine']);
-    Route::get('/detail_report_check_machine/{id}/{room}/{room_level}', [MachineController::class, 'detail_report_check_machine']);
+    Route::get('/detail_report_check_machine/{id}/{room}/{room_level}/{date_check}', [MachineController::class, 'detail_report_check_machine']);
     Route::post('/dalete_date_for_checkings', [MachineController::class, 'dalete_date_for_checkings']);
     
     Route::get('/back_page', [MachineController::class, 'back_page']);

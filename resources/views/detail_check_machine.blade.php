@@ -92,7 +92,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
                             @if($machine_room->img_for_checked != null && $machine_room->img_for_checked != '')
@@ -106,9 +106,8 @@
                                 <p style="font-size: 0.8rem;">รูปภาพยืนยันการเช็ค </p>
                             </div>
                                 <div class="col-2">
-                                    <img onclick="show_img('{{'img/img_for_checked/'.$machine_room->img_for_checked}}')" width="100%" src="{{asset('img/img_for_checked/'.$machine_room->img_for_checked)}}"/>
+                                    <img onclick="show_img('{{'img/img_for_checked/ตรวจห้องเครื่องวันที่ '.(new datetime($date_for_checkings->start_date))->format('d-m-Y').'/'.$machine_room->img_for_checked}}')" width="100%" src="{{asset('img/img_for_checked/ตรวจห้องเครื่องวันที่ '.(new datetime($date_for_checkings->start_date))->format('d-m-Y').'/'.$machine_room->img_for_checked)}}"/>
                                 </div>
-                              
                             @endif
                         </div>
                     </div>
@@ -125,7 +124,7 @@
     <script>
         function show_img(pString){
             Swal.fire({
-            imageUrl: '../../'+pString,
+            imageUrl: '../../../'+pString,
             showCloseButton: true,
             showConfirmButton: false,
             imageWidth: 300,

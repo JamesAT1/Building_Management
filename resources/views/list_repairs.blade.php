@@ -60,6 +60,12 @@
                             @csrf
                             <select class="form-select" name="editor" onchange="this.form.submit()">
                                 <option value="">{{$editor != null ? $editor : ทั้งหมด}}</option>
+                                @if($editor != null && $editor != "ทั้งหมด")
+                                    <option value="ทั้งหมด">ทั้งหมด</option>
+                                @endif
+                                @if($editor != null && $editor != "Bookmark")
+                                <option value="Bookmark">Bookmark</option>
+                                @endif
                                 @if($editor != "Reception")
                                     <option value="Reception">Reception</option>
                                 @endif

@@ -105,9 +105,8 @@
                                 <p style="font-size: 0.8rem;">รูปภาพยืนยันการเช็ค </p>
                             </div>
                                 <div class="col-2">
-                                    <img onclick="show_img('{{'img/img_for_checked/'.$machine_rooms_check_day->img_for_checked}}')" width="100%" src="{{asset('img/img_for_checked/'.$machine_rooms_check_day->img_for_checked)}}"/>
+                                    <img onclick="show_img('{{'img/img_for_checked/ตรวจห้องเครื่องวันที่ '.(new datetime($date_check))->format('d-m-Y').'/'.$machine_rooms_check_day->img_for_checked}}')" width="100%" src="{{asset('img/img_for_checked/ตรวจห้องเครื่องวันที่ '. (new datetime($date_check))->format('d-m-Y') .'/'.$machine_rooms_check_day->img_for_checked)}}"/>
                                 </div>
-
                             @endif
                         </div>
                     </div>
@@ -121,9 +120,9 @@
     @endsection
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function show_img(pString){
+            function show_img(pString){
                 Swal.fire({
-                imageUrl: '../../../'+pString,
+                imageUrl: '../../../../'+pString,
                 showCloseButton: true,
                 showConfirmButton: false,
                 imageWidth: 300,

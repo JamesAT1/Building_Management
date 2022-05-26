@@ -21,7 +21,8 @@
     <div class="image">
       <!-- <img src="" class="img-circle elevation-2" alt="User Image"> -->
       @if(session('user_auth') != null)
-      {{session('user_auth')[0]->user_firstname . " " . session('user_auth')[0]->user_lastname}}
+      <img src="{{asset('/img/profile.png')}}" class="rounded-circle" style="width: 38px;" alt="Avatar" />
+      <a href="{{url('modify_user/'.session('user_auth')[0]->user_id)}}" style="color:white">&nbsp;&nbsp;{{session('user_auth')[0]->user_firstname . " " . session('user_auth')[0]->user_lastname}}</a>
       @endif
     </div>
     <div class="info">
@@ -89,7 +90,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a href="{{url('/check_machine')}}" class="nav-link {{ (request()->is('check_machine')) ? 'active' : '' || (request()->is('insert_machine')) ? 'active' : '' || (request()->is('report_check_machine')) ? 'active' : '' || (request()->is('row_report_check_machine')) ? 'active' : '' || (request()->is('checking_machine/*')) ? 'active' : '' || (request()->is('detail_report_check_machine/*')) ? 'active' : '' }} ">
+          <a href="{{url('/check_machine')}}" class="nav-link {{ (request()->is('check_machine')) ? 'active' : '' || (request()->is('insert_machine')) ? 'active' : '' || (request()->is('report_check_machine')) ? 'active' : '' || (request()->is('row_report_check_machine')) ? 'active' : '' || (request()->is('checking_machine/*')) ? 'active' : '' || (request()->is('detail_report_check_machine/*')) ? 'active' : '' || (request()->is('detail_check_machine/*')) ? 'active' : '' }} ">
             <i class="nav-icon fas fa-solid fa-temperature-half"></i>
             <p>
               เช็คห้องเครื่อง

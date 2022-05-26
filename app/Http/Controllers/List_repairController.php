@@ -17,14 +17,29 @@ class List_repairController extends Controller
 {
 
     public function list_repairs_select(Request $request){
-        $editor = $request->editor;
-        $list_of_repairs = list_of_repairs::where('approve_report', '!=', '1')->where('editor', '=', $request->editor)->orderByDesc('bookmark_checked')->orderByDesc('editor')->get(); //where('status_repair', '!=', 'ดำเนินการสำเร็จ')->
-        return view('list_repairs', compact(['list_of_repairs', 'editor']));
+        if(!session()->has('select_editor')){
+            session()->put('select_editor', 'ทั้งหมด');
+        }else{
+            session()->put('select_editor', $request->editor);
+        }
+
+        return $this->list_repair();
     }
 
     public function list_repair(){
-        $editor = "ทั้งหมด";
-        $list_of_repairs = list_of_repairs::where('approve_report', '!=', '1')->orderByDesc('bookmark_checked')->orderByDesc('editor')->get(); //where('status_repair', '!=', 'ดำเนินการสำเร็จ')->
+        if(!session()->has('select_editor')){
+            session()->put('select_editor', 'ทั้งหมด');
+        }
+
+        $editor = session()->get('select_editor');
+
+        if($editor == "ทั้งหมด"){
+            $list_of_repairs = list_of_repairs::where('approve_report', '!=', '1')->orderByDesc('bookmark_checked')->orderByDesc('editor')->get();
+        }else if($editor == "Bookmark"){
+            $list_of_repairs = list_of_repairs::where('approve_report', '!=', '1')->where('bookmark_checked', '=', true)->orderByDesc('bookmark_checked')->orderByDesc('editor')->get();
+        }else{
+            $list_of_repairs = list_of_repairs::where('approve_report', '!=', '1')->where('editor', '=', $editor)->orderByDesc('bookmark_checked')->orderByDesc('editor')->get();
+        }
         return view('list_repairs', compact(['list_of_repairs', 'editor']));
     }
 
@@ -76,8 +91,8 @@ class List_repairController extends Controller
     }
 
     public function remove_repair($id){
-        $list_of_repairs = list_of_repairs::find($id)->delete();
-        return redirect()->back();
+        list_of_repairs::find($id)->delete();
+        return redirect('list_repairs');
     }
 
     public function set_bookmark(Request $request){

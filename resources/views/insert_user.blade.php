@@ -88,11 +88,6 @@
                                 <br />
 
                             </div>
-                            <div class="col-6">
-                                <label>รูปภาพ</label>
-                                <input type="file" class="form-control" name="user_img" required/>
-                                <br />
-                            </div>
                             <div class="col-12">
                             <br />
                                 <button type="submit" class="form-control btn btn-info">สร้างข้อมูลพนักงาน</button>

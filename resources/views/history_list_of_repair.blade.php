@@ -62,7 +62,6 @@
                     <table class="table table-hover" width="100%">
                         <thead class="header-table">
                             <tr>
-                                <th width="3%">แท็ก</th>
                                 <th width="2%">ที่</th>
                                 <th width="10%">วันที่แจ้ง</th>
                                 <th width="21%">รายการ</th>
@@ -77,17 +76,6 @@
                             <?php $count_repair = 1 ?>
                             @foreach($list_of_repairs as $list_of_repair)
                                 <tr>
-                                    <td>
-                                        <form action="{{url('set_bookmark')}}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="bm_id" value="{{$list_of_repair->list_repair_id}}" />
-                                            @if($list_of_repair->bookmark_checked == true)
-                                                <input class="star" name="bm_status" value="1" checked type="checkbox" onclick="this.form.submit()">
-                                            @else
-                                                <input class="star" name="bm_status" value="0" type="checkbox" onclick="this.form.submit()">
-                                            @endif
-                                        </form>
-                                    </td>
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">{{$count_repair++}}</td>
                                     <td onclick="location.href = '/process_repair/{{$list_of_repair->list_repair_id}}'">
                                         {{(new Datetime($list_of_repair->date_of_report))->format('d-m-Y')}}
