@@ -267,6 +267,7 @@ class MachineController extends Controller
 
                 if ($date_for_checking != null) {
                     $date_for_checking->delete();
+                    $this->log_process(session('user_auth')[0]->user_firstname . " " . session('user_auth')[0]->user_lastname . " (" . session('user_auth')[0]->user_nickname . ")", "ลบข้อมูลห้องวันที่: ".$date_for_checking->start_date);
                 }
             }
         };
